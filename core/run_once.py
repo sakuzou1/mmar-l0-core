@@ -15,6 +15,8 @@ delta = json.loads(Path(args.delta).read_text(encoding="utf-8"))
 severity = delta.get("severity", "PASS")
 if severity not in ("PASS", "DELAY", "BLOCK"):
     severity = "BLOCK"
+if delta.get("block") is True:
+    severity = "BLOCK"
 
 decision_gate = {
     "severity": severity,
