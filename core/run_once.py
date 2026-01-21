@@ -12,6 +12,9 @@ def main(argv=None) -> int:
     delta = json.loads(Path(args.delta).read_text(encoding="utf-8"))
 
     # L0: placeholder output (deterministic)
+severity = delta.get("severity", "PASS")
+if severity not in ("PASS", "DELAY", "BLOCK"):
+    severity = "BLOCK"
 　　　decision_gate = {
     "severity": "PASS",
     "until": None,
