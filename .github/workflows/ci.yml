@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run once (smoke)
+        run: |
+          python -m core.run_once \
+            --asof examples/asof_pack.example.json \
+            --delta examples/delta_entry.example.json \
+            --out out_gate_test/decision_gate.json
+
+      - name: Show output
+        run: |
+          cat out_gate_test/decision_gate.json
