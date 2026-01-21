@@ -12,13 +12,13 @@ def main(argv=None) -> int:
     delta = json.loads(Path(args.delta).read_text(encoding="utf-8"))
 
     # L0: placeholder output (deterministic)
-    decision_gate = {
-        "severity": "PASS",
-        "until": None,
-        "evidence": [],
-        "asof": asof,
-        "delta": delta,
-    }
+　　　decision_gate = {
+    "severity": "PASS",
+    "until": None,
+    "evidence": [],
+}
+
+
 
     outp = Path(args.out)
     outp.parent.mkdir(parents=True, exist_ok=True)
