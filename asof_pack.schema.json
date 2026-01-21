@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "asof_pack",
+  "type": "object",
+  "required": ["asof", "context"],
+  "properties": {
+    "asof": { "type": "string" },
+    "context": { "type": "object" }
+  },
+  "additionalProperties": true
+}
