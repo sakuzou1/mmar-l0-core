@@ -19,6 +19,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install jsonschema
 
+      - name: Validate input schemas
+        run: |
+          python - << 'PY'
+          import json
+          from jsonschema import validate
+          asof = json.load(open("examples/asof_pack.example.json", "r", encoding="utf-8"))
+          delta = json.load(open("examples/delta_entry.example.json", "r", encoding="utf-8"))
+          validate(asof, json.load(open("asof_pack.schema.json", "r", encoding="utf-8")))
+          validate(delta, json.load(open("delta_entry.schema.json", "r", encoding="utf-8")))
+          print("input schema: OK")
+          PY
+
       - name: Run once (smoke)
         run: |
           python -m core.run_once \
@@ -34,10 +46,11 @@ jobs:
           gate = json.load(open("out_gate_test/decision_gate.json", "r", encoding="utf-8"))
           schema = json.load(open("decision_gate.schema.json", "r", encoding="utf-8"))
           validate(instance=gate, schema=schema)
-          print("schema: OK")
+          print("output schema: OK")
           PY
 
       - name: Show output
         run: |
           cat out_gate_test/decision_gate.json
+
 
