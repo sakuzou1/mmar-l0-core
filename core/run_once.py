@@ -19,7 +19,7 @@ if severity not in ("PASS", "DELAY", "BLOCK"):
 decision_gate = {
     "severity": severity,
     "until": None,
-    "evidence": [],
+    "evidence": list(dict.fromkeys(delta.get("evidence", []))),
 }
 
 outp = Path(args.out)
