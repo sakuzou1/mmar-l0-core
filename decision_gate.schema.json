@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "decision_gate",
+  "type": "object",
+  "required": ["severity", "until", "evidence"],
+  "properties": {
+    "severity": { "type": "string", "enum": ["PASS", "DELAY", "BLOCK"] },
+    "until": { "type": ["string", "null"] },
+    "evidence": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
