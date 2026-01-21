@@ -11,12 +11,13 @@ def main(argv=None) -> int:
     asof = json.loads(Path(args.asof).read_text(encoding="utf-8"))
     delta = json.loads(Path(args.delta).read_text(encoding="utf-8"))
 
-    # L0: placeholder output (deterministic)
+# L0: placeholder output (deterministic) + input-driven severity
 severity = delta.get("severity", "PASS")
 if severity not in ("PASS", "DELAY", "BLOCK"):
     severity = "BLOCK"
-　　　decision_gate = {
-    "severity": "PASS",
+
+decision_gate = {
+    "severity": severity,
     "until": None,
     "evidence": [],
 }
