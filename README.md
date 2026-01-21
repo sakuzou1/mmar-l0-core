@@ -16,10 +16,9 @@ python -m core.run_once \
 python -m pip install jsonschema
 python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
 
+
 PIC merge (minimal)
 
 evidence: ∪ (dedupe)
-
 until: max (currently direct from delta)
-
 severity: OR (delta.block=true => BLOCK)
