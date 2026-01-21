@@ -1,3 +1,5 @@
+![ci](https://github.com/shin4141/mmar-l0-core/actions/workflows/ci.yml/badge.svg)
+
 # mmar-l0-core
 
 Minimal MMAR / L0 core.
