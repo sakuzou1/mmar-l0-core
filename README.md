@@ -1,4 +1,4 @@
-![ci](https://github.com/shin4141/mmar-l0-core/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/shin4141/mmar-l0-core/actions/workflows/ci.yml/badge.svg)CI validates input/output JSON schemas (contract) and runs run_once.
 
 # mmar-l0-core
 
