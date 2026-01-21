@@ -1,5 +1,7 @@
-import argparse, json
+import argparse
+import json
 from pathlib import Path
+
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser()
@@ -11,16 +13,29 @@ def main(argv=None) -> int:
     asof = json.loads(Path(args.asof).read_text(encoding="utf-8"))
     delta = json.loads(Path(args.delta).read_text(encoding="utf-8"))
 
-# L0: placeholder output (deterministic) + input-driven severity
-severity = delta.get("severity", "PASS")
-if severity not in ("PASS", "DELAY", "BLOCK"):
-    severity = "BLOCK"
+    # L0.2: input-driven severity (deterministic)
+    severity = delta.get("severity", "PASS")
+    if severity not in ("PASS", "DELAY", "BLOCK"):
+        severity = "BLOCK"
 
-decision_gate = {
-    "severity": severity,
-    "until": None,
-    "evidence": [],
-}
+    decision_gate = {
+        "severity": severity,
+        "until": None,
+        "evidence": [],
+    }
+
+    outp = Path(args.out)
+    outp.parent.mkdir(parents=True, exist_ok=True)
+    outp.write_text(
+        json.dumps(decision_gate, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
 
 
 
