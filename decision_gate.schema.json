@@ -27,6 +27,14 @@
     "suggested_fix": {
       "type": "array",
       "items": { "type": "string" }
+    },
+
+    "recheck": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "next_action": {
+      "type": ["string", "null"]
     }
   },
   "additionalProperties": false
