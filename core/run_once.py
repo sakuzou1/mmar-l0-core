@@ -40,6 +40,13 @@ if delta.get("block") is True:
 # Carry through evidence list (dedupe, preserve order)
 evidence_list = list(dict.fromkeys(delta.get("evidence", [])))
 
+# Auto rule: no evidence => DELAY (unless already BLOCK)
+if severity != "BLOCK" and not evidence_list:
+    severity = "DELAY"
+    reason_codes.append("AUTO_DELAY_NO_EVIDENCE")
+    evidence_paths.append("delta.evidence")
+    suggested_fix.append("Add at least one item to `delta.evidence` to move from DELAY to PASS/BLOCK.")
+
 # --- DELAY operationalization (48h default) ---
 until = delta.get("until", None)
 recheck = []
