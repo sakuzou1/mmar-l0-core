@@ -1,11 +1,30 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "asof_pack",
+  "title": "delta_entry",
   "type": "object",
-  "required": ["asof", "context"],
   "properties": {
-    "asof": { "type": "string" },
-    "context": { "type": "object" }
+    "delta_id": { "type": "string" },
+    "summary": { "type": "string" },
+    "request": { "type": "string" },
+
+    "severity": { "type": "string", "enum": ["PASS", "DELAY", "BLOCK"] },
+    "until": { "type": ["string", "null"] },
+
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "block": { "type": "boolean" },
+
+    "impact": {
+      "type": "object",
+      "properties": {
+        "externality": { "type": "string", "enum": ["low", "medium", "high"] },
+        "irreversibility": { "type": "string", "enum": ["low", "medium", "high"] }
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": true
 }
