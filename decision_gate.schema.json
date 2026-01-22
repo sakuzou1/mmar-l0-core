@@ -4,9 +4,30 @@
   "type": "object",
   "required": ["severity", "until", "evidence"],
   "properties": {
-    "severity": { "type": "string", "enum": ["PASS", "DELAY", "BLOCK"] },
-    "until": { "type": ["string", "null"] },
-    "evidence": { "type": "array", "items": { "type": "string" } }
+    "severity": {
+      "type": "string",
+      "enum": ["PASS", "DELAY", "BLOCK"]
+    },
+    "until": {
+      "type": ["string", "null"]
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "reason_codes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "suggested_fix": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
   },
   "additionalProperties": false
 }
