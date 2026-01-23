@@ -3,20 +3,48 @@
 # mmar-l0-core
 
 Minimal MMAR / L0 core.
-As-of (Time V2) + Δ + PIC merge (∪/max/OR) -> deterministic PASS/DELAY/BLOCK.
 
-## Run (local)
+**Input:** As-of Pack (Time V2) + Δ (delta entry)  
+**Output:** Deterministic `decision_gate.json` (PASS / DELAY / BLOCK)
 
-    python -m core.run_once \
-      --asof examples/asof_pack.example.json \
-      --delta examples/delta_entry.example.json \
-      --out out_gate_test/decision_gate.json
+Core idea:
+**As-of (Time V2) + Δ + PIC merge (∪/max/OR) → deterministic enforcement**
 
-    python -m pip install jsonschema
-    python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
+---
 
-### PIC merge (minimal)
-- evidence: ∪ (dedupe)
-- until: max (currently direct from delta)
-- severity: OR (delta.block=true => BLOCK)
+## Quickstart (local)
+
+```bash
+python -m core.run_once \
+  --asof examples/asof_pack.example.json \
+  --delta examples/delta_entry.example.json \
+  --out out_gate_test/decision_gate.json
+
+python -m pip install jsonschema
+python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
+
+What is guaranteed (L0)
+
+As-of (Time V2): decisions are evaluated under the given snapshot, not hindsight.
+Deterministic: same inputs → same output JSON.
+PIC merge (minimal):
+
+evidence = ∪ (dedupe)
+until = max (currently direct from delta)
+severity = OR (e.g., delta.block=true => BLOCK)
+
+Files
+
+examples/asof_pack.example.json : As-of snapshot input
+examples/delta_entry.example.json : Δ input (what changed / what is claimed)
+decision_gate.schema.json : output schema
+out_gate_test/decision_gate.json : output (generated)
+
+Roadmap (next)
+
+Stagnation → Intervene (Subtract-first)
+When progress stalls, switch from “keep adding” to:
+SUBTRACT (reduce scope/assumptions/dependencies)
+ADD_MODEL (inject a different model/OS only if needed)
+(Planned: resolve-based progress metric + deadline-aware threshold.)
 
