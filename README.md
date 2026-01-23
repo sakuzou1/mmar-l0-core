@@ -24,7 +24,7 @@ python -m core.run_once \
 python -m pip install jsonschema
 python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
 
-What is guaranteed (L0)
+**What is guaranteed (L0)**
 
 As-of (Time V2): decisions are evaluated under the given snapshot, not hindsight.
 Deterministic: same inputs → same output JSON.
@@ -34,14 +34,14 @@ evidence = ∪ (dedupe)
 until = max (currently direct from delta)
 severity = OR (e.g., delta.block=true => BLOCK)
 
-Files
+**Files**
 
 examples/asof_pack.example.json : As-of snapshot input
 examples/delta_entry.example.json : Δ input (what changed / what is claimed)
 decision_gate.schema.json : output schema
 out_gate_test/decision_gate.json : output (generated)
 
-Roadmap (next)
+**Roadmap (next)**
 
 Stagnation → Intervene (Subtract-first)
 When progress stalls, switch from “keep adding” to:
