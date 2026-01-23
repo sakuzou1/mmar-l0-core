@@ -1,0 +1,9 @@
+{
+  "asof": "2026-01-23",
+  "case_id": "demo-001",
+  "findings": [
+    { "type": "DISAGREEMENT", "claim": "safe to buy", "delta": "YES vs NO" },
+    { "type": "MISSING_EVIDENCE", "needs": ["official domain proof"] },
+    { "type": "STRUCTURAL_ANOMALY", "tag": "COORDINATION", "signals": {"top10_pct": 70} }
+  ]
+}
