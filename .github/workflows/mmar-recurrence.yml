@@ -1,0 +1,38 @@
+name: MMAR Recurrence (v0)
+
+on:
+  workflow_dispatch:
+    inputs:
+      example:
+        type: choice
+        description: "which example to run"
+        required: true
+        default: mmar_findings
+        options:
+          - mmar_findings
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run recurrence update (example)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python core/recurrence_update.py --in examples/mmar_findings.example.json
+          echo "--- .mmar/recurrence_log.json ---"
+          cat .mmar/recurrence_log.json
+
+      - name: Upload recurrence log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: recurrence_log
+          path: .mmar/recurrence_log.json
