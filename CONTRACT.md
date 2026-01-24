@@ -13,6 +13,7 @@ Merge: PIC minimal (∪/max/OR) + deterministic PASS/DELAY/BLOCK
 **v0 mapping (deterministic):**
 - `severity`:
   - `BLOCK` only if `signals.block=true` or `delta.block=true` is explicitly present in any finding.
+  - BLOCK is only triggered when explicitly declared (e.g., finding.signals.block=true or finding.delta.block=true).
   - otherwise `DELAY` if any `MISSING_EVIDENCE` or `STRUCTURAL_ANOMALY` exists.
   - otherwise `PASS`.
 - `evidence`:
