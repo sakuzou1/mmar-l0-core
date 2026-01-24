@@ -83,3 +83,7 @@ jobs:
           echo
           echo "--- out_gate_test/decision_gate.from_findings.json (B) ---"
           cat out_gate_test/decision_gate.from_findings.json
+          echo
+          echo "--- out_gate_test/delta_entry.from_findings.json (B input) ---"
+          cat out_gate_test/delta_entry.from_findings.json
+
