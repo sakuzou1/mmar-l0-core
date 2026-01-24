@@ -5,3 +5,19 @@ Output: decision_gate.json (schema validated in CI)
 Input contract: mmar_findings.json MUST validate against mmar_findings.schema.json (L0 entry).
 
 Merge: PIC minimal (∪/max/OR) + deterministic PASS/DELAY/BLOCK
+
+## MMAR → Delta bridge (v0)
+
+`core/findings_to_delta.py` converts `mmar_findings.json` into `delta_entry.json` for Gate enforcement.
+
+**v0 mapping (deterministic):**
+- `severity`:
+  - `BLOCK` only if `signals.block=true` or `delta.block=true` is explicitly present in any finding.
+  - otherwise `DELAY` if any `MISSING_EVIDENCE` or `STRUCTURAL_ANOMALY` exists.
+  - otherwise `PASS`.
+- `evidence`:
+  - from `MISSING_EVIDENCE.needs[]` + lightweight tags (e.g., `STRUCTURAL_ANOMALY:COORDINATION`), deduped.
+- `changes`:
+  - stores a compact record of each finding (type/tag/claim/needs/signals) for traceability.
+
+This bridge is intentionally conservative (DELAY-first) and will be tightened later with thresholds and recurrence.
