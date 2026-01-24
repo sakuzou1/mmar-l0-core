@@ -32,7 +32,9 @@ if raw_sev not in ("PASS", "DELAY", "BLOCK"):
 # Rule 0: explicit block flag overrides everything
 if delta.get("block") is True:
     severity = "BLOCK"
-    reason_codes.append("MANUAL_BLOCK_FLAG")
+    d_rc = delta.get("reason_codes", []) or []
+    is_mmar = any(isinstance(x, str) and x.startswith("MMAR:") for x in d_rc)
+    reason_codes.append("MMAR_EXPLICIT_BLOCK" if is_mmar else "MANUAL_BLOCK_FLAG")
     evidence_paths.append("delta.block")
     suggested_fix.append("Remove `delta.block=true` or replace with `severity=DELAY` and provide evidence.")
 
