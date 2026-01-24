@@ -40,6 +40,7 @@ jobs:
           print("input schema: OK")
           PY
 
+      # Quickstart A: delta_entry -> gate
       - name: Run once (smoke)
         run: |
           python -m core.run_once \
@@ -47,19 +48,38 @@ jobs:
             --delta examples/delta_entry.example.json \
             --out out_gate_test/decision_gate.json
 
-      - name: Validate output schema
+      - name: Validate output schema (A)
         run: |
           python - << 'PY'
           import json
           from jsonschema import validate
-
           gate = json.load(open("out_gate_test/decision_gate.json", "r", encoding="utf-8"))
           schema = json.load(open("decision_gate.schema.json", "r", encoding="utf-8"))
           validate(gate, schema)
-          print("output schema: OK")
+          print("output schema (A): OK")
           PY
 
-      - name: Show output
+      # Quickstart B: mmar_findings -> delta_entry -> gate
+      - name: MMAR -> Gate (smoke)
         run: |
-          echo "--- out_gate_test/decision_gate.json ---"
+          python3 core/findings_to_delta.py --in examples/mmar_findings.example.json --out out_gate_test/delta_entry.from_findings.json
+          python -m core.run_once --asof examples/asof_pack.example.json --delta out_gate_test/delta_entry.from_findings.json --out out_gate_test/decision_gate.from_findings.json
+
+      - name: Validate output schema (B)
+        run: |
+          python - << 'PY'
+          import json
+          from jsonschema import validate
+          gate = json.load(open("out_gate_test/decision_gate.from_findings.json", "r", encoding="utf-8"))
+          schema = json.load(open("decision_gate.schema.json", "r", encoding="utf-8"))
+          validate(gate, schema)
+          print("output schema (B): OK")
+          PY
+
+      - name: Show outputs
+        run: |
+          echo "--- out_gate_test/decision_gate.json (A) ---"
           cat out_gate_test/decision_gate.json
+          echo
+          echo "--- out_gate_test/decision_gate.from_findings.json (B) ---"
+          cat out_gate_test/decision_gate.from_findings.json
