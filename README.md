@@ -21,6 +21,13 @@ python -m core.run_once \
   --out out_gate_test/decision_gate.json
 ```
 
+### Gate (from delta_entry)
+
+```bash
+python3 core/findings_to_delta.py --in examples/mmar_findings.example.json --out out_gate_test/delta_entry.from_findings.json
+python -m core.run_once --asof examples/asof_pack.example.json --delta out_gate_test/delta_entry.from_findings.json --out out_gate_test/decision_gate.json
+```
+
 python -m pip install jsonschema
 python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
 
