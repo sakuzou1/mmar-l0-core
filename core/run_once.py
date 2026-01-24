@@ -60,6 +60,7 @@ if severity != "BLOCK" and not evidence_list:
     else:
         severity = "DELAY"
         reason_codes.append("AUTO_DELAY_NO_EVIDENCE")
+        reason_codes.append("MMAR_DELAY_EVIDENCE_GAP")
         evidence_paths.append("delta.evidence")
         suggested_fix.append("Add at least one item to `delta.evidence` to move from DELAY to PASS/BLOCK.")
 
