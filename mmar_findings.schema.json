@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mmar_findings.schema.json",
+  "title": "MMAR Findings (L0)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "asof", "findings"],
+  "properties": {
+    "case_id": { "type": "string", "minLength": 1 },
+    "asof": { "type": "string", "minLength": 1, "description": "As-of snapshot label (Time V2)" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional metadata (model, run_id, notes, etc.)"
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    }
+  },
+  "$defs": {
+    "finding_type": {
+      "type": "string",
+      "enum": ["DISAGREEMENT", "MISSING_EVIDENCE", "STRUCTURAL_ANOMALY", "NOVEL_STRUCTURE"]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "claim"],
+      "properties": {
+        "type": { "$ref": "#/$defs/finding_type" },
+        "tag": { "type": ["string", "null"], "description": "Optional subtype tag (e.g., COORDINATION)" },
+        "claim": { "type": "string", "minLength": 1, "description": "What is asserted/observed" },
+        "needs": {
+          "type": ["array", "null"],
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Missing evidence / required checks"
+        },
+        "delta": {
+          "type": ["object", "null"],
+          "additionalProperties": true,
+          "description": "Optional proposed delta payload (bridge to delta_entry later)"
+        },
+        "signals": {
+          "type": ["object", "null"],
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "type": "null" },
+              { "type": "array" },
+              { "type": "object" }
+            ]
+          },
+          "description": "Freeform signals; keep stable keys if possible"
+        }
+      }
+    }
+  }
+}
