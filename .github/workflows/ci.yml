@@ -1,33 +1,42 @@
-name: ci
+name: CI
 
 on:
   push:
+    branches: ["main"]
   pull_request:
 
 jobs:
-  smoke:
+  ci:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install jsonschema
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install jsonschema
+          python -m pip install jsonschema
 
       - name: Validate input schemas
         run: |
           python - << 'PY'
           import json
           from jsonschema import validate
+
           asof = json.load(open("examples/asof_pack.example.json", "r", encoding="utf-8"))
           delta = json.load(open("examples/delta_entry.example.json", "r", encoding="utf-8"))
+          mmar = json.load(open("examples/mmar_findings.example.json", "r", encoding="utf-8"))
+
           validate(asof, json.load(open("asof_pack.schema.json", "r", encoding="utf-8")))
           validate(delta, json.load(open("delta_entry.schema.json", "r", encoding="utf-8")))
+          validate(mmar, json.load(open("mmar_findings.schema.json", "r", encoding="utf-8")))
+
           print("input schema: OK")
           PY
 
@@ -43,14 +52,14 @@ jobs:
           python - << 'PY'
           import json
           from jsonschema import validate
+
           gate = json.load(open("out_gate_test/decision_gate.json", "r", encoding="utf-8"))
           schema = json.load(open("decision_gate.schema.json", "r", encoding="utf-8"))
-          validate(instance=gate, schema=schema)
+          validate(gate, schema)
           print("output schema: OK")
           PY
 
       - name: Show output
         run: |
+          echo "--- out_gate_test/decision_gate.json ---"
           cat out_gate_test/decision_gate.json
-
-
