@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "intervene",
+  "type": "object",
+  "required": ["action", "stagnation", "reason", "ev_continue", "ev_intervene", "profile"],
+  "properties": {
+    "action": { "type": "string", "enum": ["NONE", "SUBTRACT", "ADD_MODEL"] },
+    "stagnation": { "type": "boolean" },
+    "reason": { "type": "array", "items": { "type": "string" } },
+    "ev_continue": { "type": "number" },
+    "ev_intervene": { "type": "number" },
+    "profile": { "type": "object" }
+  },
+  "additionalProperties": true
+}
