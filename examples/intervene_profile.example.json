@@ -1,0 +1,9 @@
+{
+  "budget_mode": "tight",
+  "deadline_days": 30,
+  "window_cost": 1.0,
+  "intervene_cost_subtract": 1.0,
+  "intervene_cost_add_model": 2.0,
+  "value_breakthrough": 10.0,
+  "base_p_break": 0.15
+}
