@@ -15,8 +15,11 @@
       "type": "array",
       "items": { "type": "string" }
     },
-
     "reason_codes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "upstream_reason_codes": {
       "type": "array",
       "items": { "type": "string" }
     },
@@ -28,7 +31,6 @@
       "type": "array",
       "items": { "type": "string" }
     },
-
     "recheck": {
       "type": "array",
       "items": { "type": "string" }
@@ -39,3 +41,4 @@
   },
   "additionalProperties": false
 }
+
