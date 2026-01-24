@@ -75,6 +75,25 @@ jobs:
           validate(gate, schema)
           print("output schema (B): OK")
           PY
+          
+      - name: Intervene (v0) from Gate (B)
+        run: |
+          python3 tools/intervene_gate.py \
+            --gate out_gate_test/decision_gate.from_findings.json \
+            --profile examples/intervene_profile.example.json \
+            --out out_gate_test/intervene.json
+
+          python - << 'PY'
+          import json
+          from jsonschema import validate
+          intervene = json.load(open("out_gate_test/intervene.json", "r", encoding="utf-8"))
+          schema = json.load(open("intervene.schema.json", "r", encoding="utf-8"))
+          validate(intervene, schema)
+          print("intervene schema: OK")
+          PY
+
+          echo "--- out_gate_test/intervene.json ---"
+          cat out_gate_test/intervene.json
 
       - name: Show outputs
         run: |
