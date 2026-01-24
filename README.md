@@ -25,6 +25,8 @@ python -m core.run_once \
 
 ### Quickstart B: mmar_findings → delta_entry → gate
 
+Note: BLOCK is only triggered when explicitly declared (signals.block=true).
+
 #### B1: findings → delta_entry
 ```bash
 python3 core/findings_to_delta.py --in examples/mmar_findings.example.json --out out_gate_test/delta_entry.from_findings.json
