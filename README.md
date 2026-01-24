@@ -44,7 +44,7 @@ Aggregate multiple `recurrence_log.json` files (e.g., downloaded artifacts) and 
 
 ```bash
 python3 tools/recurrence_aggregate.py --in downloads --out out/recurrence_aggregate.json
-
+```
 
 **What is guaranteed (L0)**
 
