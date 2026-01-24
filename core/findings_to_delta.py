@@ -29,19 +29,6 @@ def _reason_code_for_finding(f: dict) -> str:
 
 
 def findings_to_delta(findings_doc: dict) -> dict:
-    """
-    v0 mapping (deterministic + conservative):
-    - severity:
-      - BLOCK only if signals.block=true or delta.block=true explicitly appears in any finding.
-      - else DELAY if any MISSING_EVIDENCE or STRUCTURAL_ANOMALY exists.
-      - else PASS.
-    - evidence:
-      - from MISSING_EVIDENCE.needs[] + lightweight tags (e.g. STRUCTURAL_ANOMALY:COORDINATION), deduped.
-    - changes:
-      - compact record per finding for traceability.
-    - reason_codes (NEW):
-      - stable codes derived from finding type/tag. (delta_entry allows additionalProperties)
-    """
     now = datetime.now(timezone.utc).isoformat()
 
     case_id = findings_doc.get("case_id", "unknown")
@@ -55,6 +42,10 @@ def findings_to_delta(findings_doc: dict) -> dict:
     has_delay = False
     has_block = False
 
+    flags = {
+        "coordination_detected": False
+    }
+
     for f in findings:
         f_type = f.get("type")
         tag = f.get("tag")
@@ -63,29 +54,28 @@ def findings_to_delta(findings_doc: dict) -> dict:
         signals = f.get("signals") or {}
         delta_payload = f.get("delta") or {}
 
-        # v0 severity triggers
+        # v0 severity triggers (conservative)
         if f_type in ("MISSING_EVIDENCE", "STRUCTURAL_ANOMALY"):
             has_delay = True
+
+        # v0.1: explicit flag for a known high-signal anomaly
+        if f_type == "STRUCTURAL_ANOMALY" and tag == "COORDINATION":
+            flags["coordination_detected"] = True
 
         # explicit block trigger (only when declared)
         if bool(signals.get("block")) or bool(delta_payload.get("block")):
             has_block = True
 
-        # reason code (NEW)
         rc = _reason_code_for_finding(f)
         reason_codes.append(rc)
 
-        # evidence strings
         if f_type == "MISSING_EVIDENCE":
             for n in needs:
                 if isinstance(n, str) and n.strip():
                     evidence.append(n.strip())
         else:
             if isinstance(f_type, str) and f_type:
-                if tag:
-                    evidence.append(f"{f_type}:{tag}")
-                else:
-                    evidence.append(f_type)
+                evidence.append(f"{f_type}:{tag}" if tag else f_type)
 
         changes.append({
             "type": f_type,
@@ -109,15 +99,13 @@ def findings_to_delta(findings_doc: dict) -> dict:
         "block": (severity == "BLOCK"),
         "evidence": sorted(set(evidence)),
         "changes": changes,
-
-        # NEW: for visibility / downstream mapping
         "reason_codes": sorted(set(reason_codes)),
-
         "meta": {
             "generated_at": now,
             "source": "mmar_findings",
             "case_id": case_id,
-            "asof": asof
+            "asof": asof,
+            "flags": flags
         }
     }
     return out
@@ -134,3 +122,4 @@ if __name__ == "__main__":
     out = findings_to_delta(doc)
     _save_json(Path(args.outp), out)
     print(f"[findings_to_delta] wrote -> {args.outp} severity={out['severity']}")
+
