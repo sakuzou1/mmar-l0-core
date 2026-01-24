@@ -85,11 +85,14 @@ if severity == "DELAY":
     ]
     next_action = "RERUN_AFTER_UNTIL"
 
+upstream_reason_codes = [x for x in reason_codes if isinstance(x, str) and (x.startswith("MMAR_") or x.startswith("MMAR:"))]
+
 decision_gate = {
     "severity": severity,
     "until": until,
     "evidence": evidence_list,
     "reason_codes": list(dict.fromkeys(reason_codes)),
+    "upstream_reason_codes": upstream_reason_codes,
     "evidence_paths": list(dict.fromkeys(evidence_paths)),
     "suggested_fix": list(dict.fromkeys(suggested_fix)),
     "recheck": recheck,
