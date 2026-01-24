@@ -14,6 +14,8 @@ Core idea:
 
 ## Quickstart (local)
 
+### Quickstart A: delta_entry → gate
+
 ```bash
 python -m core.run_once \
   --asof examples/asof_pack.example.json \
@@ -21,7 +23,7 @@ python -m core.run_once \
   --out out_gate_test/decision_gate.json
 ```
 
-### Gate (from delta_entry)
+### Quickstart B: mmar_findings → delta_entry → gate
 
 ```bash
 python3 core/findings_to_delta.py --in examples/mmar_findings.example.json --out out_gate_test/delta_entry.from_findings.json
