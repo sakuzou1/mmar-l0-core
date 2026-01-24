@@ -38,6 +38,14 @@ python -m core.run_once --asof examples/asof_pack.example.json --delta out_gate_
 python -m pip install jsonschema
 python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
 
+## Recurrence (aggregate)
+
+Aggregate multiple `recurrence_log.json` files (e.g., downloaded artifacts) and promote recurring patterns:
+
+```bash
+python3 tools/recurrence_aggregate.py --in downloads --out out/recurrence_aggregate.json
+
+
 **What is guaranteed (L0)**
 
 As-of (Time V2): decisions are evaluated under the given snapshot, not hindsight.
