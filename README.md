@@ -2,7 +2,7 @@
 
 # mmar-l0-core
 
-Minimal MMAR / L0 core..
+Minimal MMAR / L0 core.
 
 **Input:** As-of Pack (Time V2) + Δ (delta entry)  
 **Output:** Deterministic `decision_gate.json` (PASS / DELAY / BLOCK)
