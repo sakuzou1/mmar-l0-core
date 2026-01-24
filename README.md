@@ -38,6 +38,12 @@ Note: BLOCK is only triggered when explicitly declared (signals.block=true).
 python -m core.run_once --asof examples/asof_pack.example.json --delta out_gate_test/delta_entry.from_findings.json --out out_gate_test/decision_gate.json
 ```
 
+### Quickstart C: Gate → Intervene (budget/time-aware)
+
+```bash
+python3 tools/intervene_gate.py --gate out_gate_test/decision_gate.from_findings.json --profile examples/intervene_profile.example.json --out out_gate_test/intervene.json
+```
+
 python -m pip install jsonschema
 python -c "import json; from jsonschema import validate; validate(json.load(open('out_gate_test/decision_gate.json')), json.load(open('decision_gate.schema.json'))); print('schema: OK')"
 
