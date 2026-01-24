@@ -3,7 +3,7 @@
   "case_id": "demo-001",
   "findings": [
     { "type": "DISAGREEMENT", "claim": "safe to buy", "delta": "YES vs NO" },
-    { "type": "MISSING_EVIDENCE", "needs": ["official domain proof"] },
-    { "type": "STRUCTURAL_ANOMALY", "tag": "COORDINATION", "signals": {"top10_pct": 70} }
+    { "type": "MISSING_EVIDENCE", "claim": "Evidence is missing for verification.", "needs": ["official domain proof"] },
+    { "type": "STRUCTURAL_ANOMALY", "tag": "COORDINATION", "claim": "Potential coordination pattern detected (top10_pct=70).", "signals": { "top10_pct": 70 } }
   ]
 }
