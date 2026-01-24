@@ -20,14 +20,27 @@ def _stable_hash(obj) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()[:12]
 
 
+def _reason_code_for_finding(f: dict) -> str:
+    t = f.get("type")
+    tag = f.get("tag")
+    if tag:
+        return f"MMAR:{t}:{tag}"
+    return f"MMAR:{t}"
+
+
 def findings_to_delta(findings_doc: dict) -> dict:
     """
-    v0 mapping (simple + deterministic):
-    - PASS by default
-    - DELAY if any MISSING_EVIDENCE or STRUCTURAL_ANOMALY exists
-    - BLOCK only if a finding explicitly asks for block via signals.block=true or delta.block=true
-    Required output fields per delta_entry schema:
-      delta_id, severity, until, block, evidence[], changes[]
+    v0 mapping (deterministic + conservative):
+    - severity:
+      - BLOCK only if signals.block=true or delta.block=true explicitly appears in any finding.
+      - else DELAY if any MISSING_EVIDENCE or STRUCTURAL_ANOMALY exists.
+      - else PASS.
+    - evidence:
+      - from MISSING_EVIDENCE.needs[] + lightweight tags (e.g. STRUCTURAL_ANOMALY:COORDINATION), deduped.
+    - changes:
+      - compact record per finding for traceability.
+    - reason_codes (NEW):
+      - stable codes derived from finding type/tag. (delta_entry allows additionalProperties)
     """
     now = datetime.now(timezone.utc).isoformat()
 
@@ -35,9 +48,9 @@ def findings_to_delta(findings_doc: dict) -> dict:
     asof = findings_doc.get("asof", "unknown")
     findings = findings_doc.get("findings", [])
 
-    # evidence: collect strings (dedupe later)
     evidence = []
     changes = []
+    reason_codes = []
 
     has_delay = False
     has_block = False
@@ -58,26 +71,29 @@ def findings_to_delta(findings_doc: dict) -> dict:
         if bool(signals.get("block")) or bool(delta_payload.get("block")):
             has_block = True
 
+        # reason code (NEW)
+        rc = _reason_code_for_finding(f)
+        reason_codes.append(rc)
+
         # evidence strings
         if f_type == "MISSING_EVIDENCE":
             for n in needs:
                 if isinstance(n, str) and n.strip():
                     evidence.append(n.strip())
         else:
-            # keep a lightweight trace without exploding evidence
             if isinstance(f_type, str) and f_type:
                 if tag:
                     evidence.append(f"{f_type}:{tag}")
                 else:
                     evidence.append(f_type)
 
-        # changes: keep minimal structured record (schema allows any item type)
         changes.append({
             "type": f_type,
             "tag": tag,
             "claim": claim,
             "needs": needs,
-            "signals": signals
+            "signals": signals,
+            "reason_code": rc
         })
 
     severity = "PASS"
@@ -94,7 +110,9 @@ def findings_to_delta(findings_doc: dict) -> dict:
         "evidence": sorted(set(evidence)),
         "changes": changes,
 
-        # optional extras (allowed by additionalProperties=true)
+        # NEW: for visibility / downstream mapping
+        "reason_codes": sorted(set(reason_codes)),
+
         "meta": {
             "generated_at": now,
             "source": "mmar_findings",
