@@ -47,5 +47,7 @@ Stagnation → Intervene (Subtract-first)
 When progress stalls, switch from “keep adding” to:
 SUBTRACT (reduce scope/assumptions/dependencies)
 ADD_MODEL (inject a different model/OS only if needed)
-(Planned: resolve-based progress metric + deadline-aware threshold.)
+Progress metric (v0): resolved_count per window (session/day).
+If a deadline exists: intervene earlier (threshold is compressed to meet the date).
+Default intervention order: SUBTRACT → ADD_MODEL (avoid endless adding).
 
