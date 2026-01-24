@@ -17,6 +17,11 @@
       "tag": "COORDINATION",
       "claim": "Potential coordination pattern detected (top10_pct=70).",
       "signals": { "top10_pct": 70 }
+    },
+    {
+      "type": "NOVEL_STRUCTURE",
+      "claim": "If the domain mismatches AND evidence is missing, treat as high-risk until verified.",
+      "signals": { "block": true }
     }
   ]
 }
