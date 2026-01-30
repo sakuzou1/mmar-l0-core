@@ -1,0 +1,17 @@
+{
+  "delta_id": "d_pass_1",
+  "severity": "PASS",
+  "until": null,
+  "block": false,
+  "evidence": [
+    "https://example.com/review/approved",
+    "sha256:REPLACE_WITH_REAL_HASH"
+  ],
+  "changes": [
+    {
+      "path": "delta.summary",
+      "op": "add",
+      "value": "Reviewed and approved under As-of constraints; no outstanding externality/irreversibility concerns."
+    }
+  ]
+}
